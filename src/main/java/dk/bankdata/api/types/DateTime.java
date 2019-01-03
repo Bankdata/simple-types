@@ -3,6 +3,7 @@ package dk.bankdata.api.types;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Objects;
 
@@ -16,13 +17,11 @@ public class DateTime {
 
     /**
      * Creates new instance based on timestamp from unix epoch (1970-01-01T00:00:00Z)
-     * @param epochMilli Milliseconds since 1970-01-01T00:00:00Z
+     * @param instant Instant to be represented by this date time
      */
-    public DateTime(long epochMilli) {
-        this.epochMilli = epochMilli;
-
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-        this.utc = df.format(new Date(epochMilli));
+    public DateTime(Instant instant) {
+        epochMilli = instant.toEpochMilli();
+        utc = DateTimeFormatter.ISO_INSTANT.format(instant);
     }
 
     public long getEpochMilli() {
@@ -46,8 +45,8 @@ public class DateTime {
         return Objects.hash(epochMilli);
     }
 
-    public static DateTime fromInstant(Instant instant) {
-        return new DateTime(instant.toEpochMilli());
+    public static DateTime ofEpochMilli(long epochMilli) {
+        return new DateTime(Instant.ofEpochMilli(epochMilli));
     }
 
 }
