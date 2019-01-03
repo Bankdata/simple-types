@@ -1,0 +1,5 @@
+
+group 'dk.bankdata.api'
+
+apple plugin: 'java'
+
