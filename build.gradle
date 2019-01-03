@@ -4,6 +4,10 @@ group 'dk.bankdata.api'
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'checkstyle'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 checkstyle {
     toolVersion = '8.12'
@@ -25,4 +29,52 @@ dependencies {
 
     testCompile(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: project['com.fasterxml.jackson.version'])
     testCompile(group: 'junit', name: 'junit', version: project['junit.version'])
+}
+
+signing {
+    required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { deployment -> signing.signPom(deployment) }
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: project.hasProperty('ossrhUsername') ? ossrhUsername : '',
+                        password: project.hasProperty('ossrhPassword') ? ossrhPassword : '')
+            }
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: project.hasProperty('ossrhUsername') ? ossrhUsername : '',
+                        password: project.hasProperty('ossrhPassword') ? ossrhPassword : '')
+            }
+            pom.project {
+                name 'Simple API Types'
+                description 'Simple types for use in implementing financial APIs'
+                packaging 'jar'
+                url 'https://github.com/Bankdata/simple-types'
+                scm {
+                    connection 'scm:git:https://github.com/Bankdata/simple-types.git'
+                    developerConnection 'scm:git:https://github.com/Bankdata/simple-types.git'
+                    url 'https://github.com/Bankdata/simple-types'
+                    tag 'HEAD'
+                }
+                licenses {
+                    license {
+                        name 'The MIT License'
+                        url 'https://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'lange'
+                        name 'Thor Anker Kvisgård Lange'
+                        email 'tel@bankdata.dk'
+                        organization 'Bankdata'
+                        organizationUrl 'https://www.bankdata.dk'
+                    }
+                }
+            }
+        }
+    }
 }
