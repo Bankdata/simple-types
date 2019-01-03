@@ -15,10 +15,4 @@ public class DateTimeTest {
         assertEquals("{\"epochMilli\":3600000,\"utc\":\"1970-01-01T01:00:00Z\"}", serialized);
     }
 
-    @Test
-    public void testOfEpochMilli() {
-        DateTime dateTime = DateTime.ofEpochMilli(3600000);
-        assertEquals(3600000, dateTime.getEpochMilli());
-    }
-
 }
