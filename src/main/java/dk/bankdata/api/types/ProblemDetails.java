@@ -5,7 +5,36 @@ import java.util.Objects;
 
 /**
  * Implementation of <a href="https://tools.ietf.org/html/rfc7807">RFC 7807 - Problem Details for HTTP APIs</a>.
- * The class may be extended to allow for extension members.
+ * The class may be extended to allow for extension members by extending {@link ProblemDetails} and {@link ProblemDetails.Builder}
+ * <code>
+ * public class ProblemDetailsExtension extends ProblemDetails {
+ *
+ *   private final String error;
+ *
+ *   protected ProblemDetailsExtension(Builder builder) {
+ *     super(builder);
+ *     this.error = builder.error;
+ *   }
+ *
+ *   public String getError() {
+ *     return error;
+ *   }
+ *
+ *   public static class Builder extends ProblemDetails.Builder&lt;Builder> {
+ *
+ *     private String error;
+ *
+ *     public Builder error(String error) {
+ *       this.error = error;
+ *       return this;
+ *     }
+ *
+ *     public ProblemDetailsExtension build() {
+ *       return new ProblemDetailsExtension(this);
+ *     }
+ *   }
+ * }
+ * </code>
  */
 public class ProblemDetails {
 
