@@ -1,10 +1,7 @@
 package dk.bankdata.api.types;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -16,7 +13,7 @@ public class DateTime {
     private final String utc;
 
     /**
-     * Creates new instance based on timestamp from unix epoch (1970-01-01T00:00:00Z)
+     * Creates new instance based on timestamp from unix epoch (1970-01-01T00:00:00Z).
      * @param instant Instant to be represented by this date time
      */
     public DateTime(Instant instant) {

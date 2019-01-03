@@ -10,7 +10,7 @@ import java.time.Instant;
  * Custom serializer formatting {@link Instant} instances. This can be applied to POJO as
  * <code>
  *     public class Model {
- *         @JsonSerialize(using = DateTimeSerializer)
+ *         &commat;JsonSerialize(using = DateTimeSerializer)
  *         private Instant dateTime;
  *
  *         public Instant getDateTime() {
@@ -18,7 +18,6 @@ import java.time.Instant;
  *         }
  *     }
  * </code>
- *
  * And will then output:
  * <pre>
  *     {

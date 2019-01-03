@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  */
 public class CurrencyAmount {
 
-    private final Pattern CURRENCY_PATTERN = Pattern.compile("^[A-Z]{3}$");
+    private static final Pattern CURRENCY_PATTERN = Pattern.compile("^[A-Z]{3}$");
 
     private final BigDecimal amount;
     private final String currency;
@@ -35,8 +35,8 @@ public class CurrencyAmount {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CurrencyAmount that = (CurrencyAmount) o;
-        return Objects.equals(amount, that.amount) &&
-                Objects.equals(currency, that.currency);
+        return Objects.equals(amount, that.amount)
+                && Objects.equals(currency, that.currency);
     }
 
     @Override

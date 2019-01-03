@@ -1,11 +1,11 @@
 package dk.bankdata.api.types;
 
+import static org.junit.Assert.assertEquals;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.time.Instant;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class DateTimeSerializerTest {
 

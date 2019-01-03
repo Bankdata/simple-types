@@ -48,11 +48,11 @@ public class ProblemDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProblemDetails that = (ProblemDetails) o;
-        return Objects.equals(type, that.type) &&
-                Objects.equals(title, that.title) &&
-                Objects.equals(status, that.status) &&
-                Objects.equals(detail, that.detail) &&
-                Objects.equals(instance, that.instance);
+        return Objects.equals(type, that.type)
+                && Objects.equals(title, that.title)
+                && Objects.equals(status, that.status)
+                && Objects.equals(detail, that.detail)
+                && Objects.equals(instance, that.instance);
     }
 
     @Override
