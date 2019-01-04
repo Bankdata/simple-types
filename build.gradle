@@ -2,10 +2,10 @@
 group 'dk.bankdata.api'
 
 apply plugin: 'java'
+apply plugin: 'signing'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 apply plugin: 'checkstyle'
-apply plugin: 'signing'
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
@@ -26,7 +26,6 @@ repositories {
 
 dependencies {
     compileOnly(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: project['com.fasterxml.jackson.version'])
-
     testCompile(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: project['com.fasterxml.jackson.version'])
     testCompile(group: 'junit', name: 'junit', version: project['junit.version'])
 }
@@ -54,7 +53,6 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 artifacts {
-    archives jar
     archives sourceJar
     archives javadocJar
 }
@@ -123,13 +121,11 @@ def customizePom(pom) {
             dep.scope == "test"
         }
 
-        // add all items necessary for maven central publication
         root.children().last() + {
             resolveStrategy = Closure.DELEGATE_FIRST
 
             name 'Simple API Types'
             description 'Simple types for use in implementing financial APIs'
-            packaging 'jar'
             url 'https://github.com/Bankdata/simple-types'
             scm {
                 connection 'scm:git:https://github.com/Bankdata/simple-types.git'
@@ -142,11 +138,6 @@ def customizePom(pom) {
                     name 'The MIT License'
                     url 'https://opensource.org/licenses/MIT'
                 }
-            }
-            scm {
-                url 'https://github.com/mautini/schemaorg-java'
-                connection 'scm:git:git://github.com/mautini/schemaorg-java.git'
-                developerConnection 'scm:git:ssh://git@github.com:mautini/schemaorg-java.git'
             }
             developers {
                 developer {
