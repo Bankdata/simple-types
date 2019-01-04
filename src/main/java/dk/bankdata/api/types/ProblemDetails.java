@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *     return error;
  *   }
  *
- *   public static class Builder extends ProblemDetails.Builder&lt;Builder> {
+ *   public static class Builder extends ProblemDetails.Builder&lt;Builder&gt; {
  *
  *     private String error;
  *
@@ -38,8 +38,8 @@ import java.util.concurrent.ConcurrentHashMap;
  *   }
  * }
  * </code>
- * <p/>
- * Extension members may also be added by utilizing the builder.
+ * 
+ * <p>Extension members may also be added by utilizing the builder.
  */
 public class ProblemDetails {
 

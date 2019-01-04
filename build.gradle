@@ -2,9 +2,9 @@
 group 'dk.bankdata.api'
 
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 apply plugin: 'checkstyle'
-apply plugin: 'maven'
 apply plugin: 'signing'
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
@@ -31,48 +31,130 @@ dependencies {
     testCompile(group: 'junit', name: 'junit', version: project['junit.version'])
 }
 
+model {
+    tasks.generatePomFileForMavenJavaPublication {
+        destination = file("$buildDir/generated-pom.xml")
+    }
+    tasks.publishMavenJavaPublicationToMavenLocal {
+        dependsOn project.tasks.signArchives
+    }
+    tasks.publishMavenJavaPublicationToMavenRepository {
+        dependsOn project.tasks.signArchives
+    }
+}
+
+task sourceJar(type: Jar) {
+    classifier "sources"
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives sourceJar
+    archives javadocJar
+}
+
 signing {
     required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
     sign configurations.archives
 }
 
-uploadArchives {
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            customizePom(pom)
+            groupId 'dk.bankdata.api'
+            artifactId 'types'
+            version version
+
+            from components.java
+
+            pom.withXml {
+                def pomFile = file("${project.buildDir}/generated-pom.xml")
+                writeTo(pomFile)
+                def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+                artifact(pomAscFile) {
+                    classifier = null
+                    extension = 'pom.asc'
+                }
+            }
+
+            artifact(sourceJar) {
+                classifier = 'sources'
+            }
+            artifact(javadocJar) {
+                classifier = 'javadoc'
+            }
+
+            project.tasks.signArchives.signatureFiles.each {
+                artifact(it) {
+                    def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+                    if (matcher.find()) {
+                        classifier = matcher.group(1)
+                    } else {
+                        classifier = null
+                    }
+                    extension = 'jar.asc'
+                }
+            }
+        }
+    }
     repositories {
-        mavenDeployer {
-            beforeDeployment { deployment -> signing.signPom(deployment) }
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: project.hasProperty('ossrhUsername') ? ossrhUsername : '',
-                        password: project.hasProperty('ossrhPassword') ? ossrhPassword : '')
+        maven {
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            credentials {
+                username project.hasProperty('ossrhUsername') ? ossrhUsername : ''
+                password project.hasProperty('ossrhPassword') ? ossrhPassword : ''
             }
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: project.hasProperty('ossrhUsername') ? ossrhUsername : '',
-                        password: project.hasProperty('ossrhPassword') ? ossrhPassword : '')
-            }
-            pom.project {
-                name 'Simple API Types'
-                description 'Simple types for use in implementing financial APIs'
-                packaging 'jar'
+        }
+    }
+}
+
+def customizePom(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        root.dependencies.removeAll { dep ->
+            dep.scope == "test"
+        }
+
+        // add all items necessary for maven central publication
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+
+            name 'Simple API Types'
+            description 'Simple types for use in implementing financial APIs'
+            packaging 'jar'
+            url 'https://github.com/Bankdata/simple-types'
+            scm {
+                connection 'scm:git:https://github.com/Bankdata/simple-types.git'
+                developerConnection 'scm:git:https://github.com/Bankdata/simple-types.git'
                 url 'https://github.com/Bankdata/simple-types'
-                scm {
-                    connection 'scm:git:https://github.com/Bankdata/simple-types.git'
-                    developerConnection 'scm:git:https://github.com/Bankdata/simple-types.git'
-                    url 'https://github.com/Bankdata/simple-types'
-                    tag 'HEAD'
+                tag 'HEAD'
+            }
+            licenses {
+                license {
+                    name 'The MIT License'
+                    url 'https://opensource.org/licenses/MIT'
                 }
-                licenses {
-                    license {
-                        name 'The MIT License'
-                        url 'https://opensource.org/licenses/MIT'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'lange'
-                        name 'Thor Anker Kvisgård Lange'
-                        email 'tel@bankdata.dk'
-                        organization 'Bankdata'
-                        organizationUrl 'https://www.bankdata.dk'
-                    }
+            }
+            scm {
+                url 'https://github.com/mautini/schemaorg-java'
+                connection 'scm:git:git://github.com/mautini/schemaorg-java.git'
+                developerConnection 'scm:git:ssh://git@github.com:mautini/schemaorg-java.git'
+            }
+            developers {
+                developer {
+                    id 'lange'
+                    name 'Thor Anker Kvisgård Lange'
+                    email 'tel@bankdata.dk'
+                    organization 'Bankdata'
+                    organizationUrl 'https://www.bankdata.dk'
                 }
             }
         }
