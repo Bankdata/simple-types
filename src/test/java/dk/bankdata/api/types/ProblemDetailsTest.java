@@ -15,10 +15,11 @@ public class ProblemDetailsTest {
                 .detail("An unrecoverable error occurred")
                 .status(500)
                 .instance(URI.create("https://instance/1"))
+                .extensionMember("balance", 23)
                 .build();
 
         ObjectMapper mapper = new ObjectMapper();
         String serialized = mapper.writeValueAsString(pd);
-        assertEquals("{\"type\":\"https://type\",\"title\":\"Error Occurred\",\"status\":500,\"detail\":\"An unrecoverable error occurred\",\"instance\":\"https://instance/1\"}", serialized);
+        assertEquals("{\"type\":\"https://type\",\"title\":\"Error Occurred\",\"status\":500,\"detail\":\"An unrecoverable error occurred\",\"instance\":\"https://instance/1\",\"balance\":23}", serialized);
     }
 }

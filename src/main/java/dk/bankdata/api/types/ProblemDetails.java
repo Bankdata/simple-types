@@ -1,7 +1,10 @@
 package dk.bankdata.api.types;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import java.net.URI;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Implementation of <a href="https://tools.ietf.org/html/rfc7807">RFC 7807 - Problem Details for HTTP APIs</a>.
@@ -35,6 +38,8 @@ import java.util.Objects;
  *   }
  * }
  * </code>
+ * <p/>
+ * Extension members may also be added by utilizing the builder.
  */
 public class ProblemDetails {
 
@@ -43,6 +48,7 @@ public class ProblemDetails {
     private final Integer status;
     private final String detail;
     private final URI instance;
+    private final Map<String, ?> extension;
 
     protected ProblemDetails(Builder<?> builder) {
         this.type = builder.type;
@@ -50,6 +56,7 @@ public class ProblemDetails {
         this.status = builder.status;
         this.detail = builder.detail;
         this.instance = builder.instance;
+        this.extension = builder.extension;
     }
 
     public URI getType() {
@@ -72,6 +79,11 @@ public class ProblemDetails {
         return instance;
     }
 
+    @JsonAnyGetter
+    public Map<String, ?> getExtension() {
+        return extension;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,12 +93,13 @@ public class ProblemDetails {
                 && Objects.equals(title, that.title)
                 && Objects.equals(status, that.status)
                 && Objects.equals(detail, that.detail)
-                && Objects.equals(instance, that.instance);
+                && Objects.equals(instance, that.instance)
+                && Objects.equals(extension, extension);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, title, status, detail, instance);
+        return Objects.hash(type, title, status, detail, instance, extension);
     }
 
     @SuppressWarnings("unchecked")
@@ -96,6 +109,7 @@ public class ProblemDetails {
         private int status;
         private String detail;
         private URI instance;
+        private Map<String, Object> extension = new ConcurrentHashMap<>();
 
         public T type(URI type) {
             this.type = type;
@@ -119,6 +133,11 @@ public class ProblemDetails {
 
         public T status(int status) {
             this.status = status;
+            return (T) this;
+        }
+
+        public T extensionMember(String member, Object value) {
+            this.extension.put(member, value);
             return (T) this;
         }
 
