@@ -38,7 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *   }
  * }
  * </code>
- * 
+ *
  * <p>Extension members may also be added by utilizing the builder.
  */
 public class ProblemDetails {
