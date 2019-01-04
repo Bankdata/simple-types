@@ -8,6 +8,10 @@ serialization.
 [![Javadoc](https://javadoc.io/badge/dk.bankdata.api/types/badge.svg)](https://www.javadoc.io/doc/dk.bankdata.api/types)
 [![Build Status](https://travis-ci.com/Bankdata/simple-types.svg?branch=master)](https://travis-ci.com/Bankdata/simple-types)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## Usage
+
+The library is deployed to Maven Central `dk.bankdata.api:types` and may be used from both Gradle or Maven.
+
 ## Problem Details
 
 The library contains an implementation of [RFC 7807 - Problem Details for HTTP APIs](https://tools.ietf.org/html/rfc7807) which
