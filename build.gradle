@@ -9,6 +9,9 @@ apply plugin: 'checkstyle'
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 checkstyle {
     toolVersion = '8.12'
 }
