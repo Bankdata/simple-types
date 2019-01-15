@@ -102,6 +102,18 @@ public class ProblemDetails {
         return Objects.hash(type, title, status, detail, instance, extension);
     }
 
+    @Override
+    public String toString() {
+        return "ProblemDetails{" +
+                "type=" + type +
+                ", title='" + title + '\'' +
+                ", status=" + status +
+                ", detail='" + detail + '\'' +
+                ", instance=" + instance +
+                ", extension=" + extension +
+                '}';
+    }
+    
     @SuppressWarnings("unchecked")
     public static class Builder<T extends Builder<T>> {
         private URI type = URI.create("about:blank");
