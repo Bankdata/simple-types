@@ -1,15 +1,14 @@
 package dk.bankdata.api.types;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Account {
     private String regNo;
     private String accountNo;
     private String name;
-    private BigDecimal balance;
+    private CurrencyAmount balance;
 
-    public Account(String regNo, String accountNo, String name, BigDecimal balance) {
+    public Account(String regNo, String accountNo, String name, CurrencyAmount balance) {
         this.regNo = regNo;
         this.accountNo = accountNo;
         this.name = name;
@@ -20,10 +19,6 @@ public class Account {
         return regNo;
     }
 
-    public int getRegNoAsInt() {
-        return Integer.valueOf(regNo);
-    }
-
     public String getAccountNo() {
         return accountNo;
     }
@@ -32,7 +27,7 @@ public class Account {
         return name;
     }
 
-    public BigDecimal getBalance() {
+    public CurrencyAmount getBalance() {
         return balance;
     }
 
