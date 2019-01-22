@@ -8,6 +8,7 @@ serialization.
 [![Javadoc](https://javadoc.io/badge/dk.bankdata.api/types/badge.svg)](https://www.javadoc.io/doc/dk.bankdata.api/types)
 [![Build Status](https://travis-ci.com/Bankdata/simple-types.svg?branch=master)](https://travis-ci.com/Bankdata/simple-types)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Known Vulnerabilities](https://snyk.io/test/github/Bankdata/simple-types/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/Bankdata/simple-types?targetFile=build.gradle)
 
 ## Usage
 
