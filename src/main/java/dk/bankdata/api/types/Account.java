@@ -9,6 +9,13 @@ public class Account {
     private String name;
     private BigDecimal balance;
 
+    public Account(String regNo, String accountNo, String name, BigDecimal balance) {
+        this.regNo = regNo;
+        this.accountNo = accountNo;
+        this.name = name;
+        this.balance = balance;
+    }
+    
     public String getRegNo() {
         return regNo;
     }
