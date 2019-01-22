@@ -43,7 +43,7 @@ public class Account {
     }
 
     public int hashCode() {
-        return Objects.hash(super.hashCode(), regNo, accountNo, name, balance);
+        return Objects.hash(regNo, accountNo, name, balance);
     }
 
     @Override
