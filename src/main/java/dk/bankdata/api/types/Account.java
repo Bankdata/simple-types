@@ -41,10 +41,10 @@ public class Account {
         if (object == null || getClass() != object.getClass()) return false;
         if (!super.equals(object)) return false;
         Account account = (Account) object;
-        return Objects.equals(regNo, account.regNo) &&
-                Objects.equals(accountNo, account.accountNo) &&
-                Objects.equals(name, account.name) &&
-                Objects.equals(balance, account.balance);
+        return Objects.equals(regNo, account.regNo) 
+                && Objects.equals(accountNo, account.accountNo) 
+                && Objects.equals(name, account.name) 
+                && Objects.equals(balance, account.balance);
     }
 
     public int hashCode() {
