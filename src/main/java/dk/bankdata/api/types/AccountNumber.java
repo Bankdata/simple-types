@@ -47,7 +47,7 @@ public class AccountNumber implements Serializable {
     }
 
     /**
-     * String representation of account number.
+     * String representation of account number on the form of <code>reg-account</code>.
      */
     @Override
     public String toString() {
