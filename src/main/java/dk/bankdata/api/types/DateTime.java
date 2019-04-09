@@ -42,6 +42,6 @@ public class DateTime {
 
     @Override
     public int hashCode() {
-        return Objects.hash(instant);
+        return instant.hashCode();
     }
 }
