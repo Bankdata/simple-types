@@ -37,7 +37,7 @@ public class DateTime {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DateTime dateTime = (DateTime) o;
-        return Objects.equals(instant, dateTime.instant);
+        return instant.equals(dateTime.instant);
     }
 
     @Override
