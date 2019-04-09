@@ -57,6 +57,11 @@ public class AccountNumber implements Serializable {
         return String.format("%1$s-%2$s", regNo, accountNo);
     }
 
+    /**
+     * Generate a JSON representation of the account number.
+     * @return JSON representation of account number
+     * @throws JsonProcessingException
+     */
     public String toJSON() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(this);
