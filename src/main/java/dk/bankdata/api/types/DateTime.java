@@ -3,7 +3,6 @@ package dk.bankdata.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.time.Instant;
-import java.util.Objects;
 
 /**
  * Date and time representation for JSON communication models. The output will contain both
