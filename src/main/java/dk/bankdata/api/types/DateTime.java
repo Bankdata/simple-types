@@ -3,6 +3,7 @@ package dk.bankdata.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.time.Instant;
+import java.util.Objects;
 
 /**
  * Date and time representation for JSON communication models. The output will contain both
@@ -30,4 +31,17 @@ public class DateTime {
         return new DateTime(Instant.ofEpochMilli(epochMilli));
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DateTime dateTime = (DateTime) o;
+        return Objects.equals(instant, dateTime.instant);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(instant);
+    }
 }
