@@ -60,9 +60,9 @@ public class AccountNumber implements Serializable {
     /**
      * Generate a JSON representation of the account number.
      * @return JSON representation of account number
-     * @throws JsonProcessingException
+     * @throws JsonProcessingException if the generation of JSON fails
      */
-    public String toJSON() throws JsonProcessingException {
+    public String toJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(this);
     }

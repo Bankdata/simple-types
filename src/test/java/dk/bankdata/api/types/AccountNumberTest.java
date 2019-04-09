@@ -50,11 +50,11 @@ public class AccountNumberTest {
     }
 
     @Test
-    public void testShouldReturnJSON() throws JsonProcessingException {
+    public void testShouldReturnJson() throws JsonProcessingException {
         String regNo = "1234";
         String accountNo = "1234567890";
         AccountNumber sut = AccountNumber.valueOf(regNo, accountNo);
-        assertEquals("{\"regNo\":\"" + regNo + "\",\"accountNo\":\"" + accountNo + "\"}", sut.toJSON());
+        assertEquals("{\"regNo\":\"" + regNo + "\",\"accountNo\":\"" + accountNo + "\"}", sut.toJson());
     }
 
 }
