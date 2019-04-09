@@ -30,4 +30,17 @@ public class DateTime {
         return new DateTime(Instant.ofEpochMilli(epochMilli));
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DateTime dateTime = (DateTime) o;
+        return instant.equals(dateTime.instant);
+    }
+
+    @Override
+    public int hashCode() {
+        return instant.hashCode();
+    }
 }
