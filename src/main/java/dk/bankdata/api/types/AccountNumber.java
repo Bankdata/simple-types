@@ -1,5 +1,8 @@
 package dk.bankdata.api.types;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -52,6 +55,11 @@ public class AccountNumber implements Serializable {
     @Override
     public String toString() {
         return String.format("%1$s-%2$s", regNo, accountNo);
+    }
+
+    public String toJSON() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(this);
     }
 
     /**

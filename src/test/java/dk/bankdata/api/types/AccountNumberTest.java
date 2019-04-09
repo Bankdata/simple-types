@@ -3,6 +3,7 @@ package dk.bankdata.api.types;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Test;
 
 public class AccountNumberTest {
@@ -46,6 +47,14 @@ public class AccountNumberTest {
         assertEquals(a1.hashCode(), a2.hashCode());
         assertNotEquals(a1, a3);
         assertNotEquals(a1.hashCode(), a3.hashCode());
+    }
+
+    @Test
+    public void testShouldReturnJSON() throws JsonProcessingException {
+        String regNo = "1234";
+        String accountNo = "1234567890";
+        AccountNumber sut = AccountNumber.valueOf(regNo, accountNo);
+        assertEquals("{\"regNo\":\"" + regNo + "\",\"accountNo\":\"" + accountNo + "\"}", sut.toJSON());
     }
 
 }
