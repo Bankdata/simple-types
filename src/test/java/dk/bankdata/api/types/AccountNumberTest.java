@@ -4,7 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import java.io.IOException;
 import org.junit.Test;
+
 
 public class AccountNumberTest {
 
@@ -55,6 +57,15 @@ public class AccountNumberTest {
         String accountNo = "1234567890";
         AccountNumber sut = AccountNumber.valueOf(regNo, accountNo);
         assertEquals("{\"regNo\":\"" + regNo + "\",\"accountNo\":\"" + accountNo + "\"}", sut.toJson());
+    }
+
+    @Test
+    public void testShouldReturnAccountNumber() throws IOException {
+        String regNo = "1234";
+        String accountNo = "1234567890";
+        AccountNumber accountNumber = AccountNumber.valueOf(regNo, accountNo);
+        AccountNumber sut = AccountNumber.fromJson("{\"regNo\":\"" + regNo + "\",\"accountNo\":\"" + accountNo + "\"}");
+        assertEquals(accountNumber, sut);
     }
 
 }
