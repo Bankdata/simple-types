@@ -74,6 +74,12 @@ public class AccountNumber implements Serializable {
         return objectMapper.writeValueAsString(this);
     }
 
+
+    /**
+     * @param jsonString JSON representation of account number
+     * @return Account instance representing account number
+     * @throws IOException if the given json string is not properly formatted
+     */
     public static AccountNumber fromJson(String jsonString) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(jsonString, AccountNumber.class);
