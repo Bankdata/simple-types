@@ -76,6 +76,7 @@ public class AccountNumber implements Serializable {
 
 
     /**
+     * Generate an Account instance from a JSON representation.
      * @param jsonString JSON representation of account number
      * @return Account instance representing account number
      * @throws IOException if the given json string is not properly formatted
