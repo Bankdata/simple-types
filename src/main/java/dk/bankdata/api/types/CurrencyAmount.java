@@ -54,7 +54,7 @@ public class CurrencyAmount {
         if (!currency.equals(currencyAmount.getCurrency())) {
             throw new IllegalArgumentException("Can't add amounts with different currencies");
         }
-        CurrencyAmount sum = new CurrencyAmount(amount.add(currencyAmount.getAmount()), currency);
+        return new CurrencyAmount(amount.add(currencyAmount.getAmount()), currency);
         return sum;
     }
 }
