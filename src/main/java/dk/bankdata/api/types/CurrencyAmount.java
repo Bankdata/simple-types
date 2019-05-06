@@ -51,10 +51,11 @@ public class CurrencyAmount {
      * @throws IllegalArgumentException if the currencies are not equal
      */
     public CurrencyAmount add(CurrencyAmount currencyAmount) {
+        Objects.requireNonNull(currencyAmount, "CurrencyAmount must not be null");
         if (!currency.equals(currencyAmount.getCurrency())) {
             throw new IllegalArgumentException("Can't add amounts with different currencies");
         }
+
         return new CurrencyAmount(amount.add(currencyAmount.getAmount()), currency);
-        return sum;
     }
 }

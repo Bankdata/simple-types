@@ -23,24 +23,29 @@ public class CurrencyAmountTest {
 
     @Test
     public void shouldAddAnotherCurrencyAmount() {
-        CurrencyAmount ca1 = new CurrencyAmount(new BigDecimal("10.99"), "DKK");
-        CurrencyAmount ca2 = new CurrencyAmount(new BigDecimal("10"), "DKK");
+        CurrencyAmount currencyAmount = new CurrencyAmount(new BigDecimal("10.99"), "DKK");
+        CurrencyAmount currencyAmountToAdd = new CurrencyAmount(new BigDecimal("10"), "DKK");
 
-        CurrencyAmount sut = ca1.add(ca2);
+        CurrencyAmount sut = currencyAmount.add(currencyAmountToAdd);
 
         assertEquals(new BigDecimal("20.99"), sut.getAmount());
         // Ensure that a new instance is returned
-        assertNotSame(sut, ca1);
-        assertNotSame(sut, ca2);
+        assertNotSame(sut, currencyAmount);
+        assertNotSame(sut, currencyAmountToAdd);
 
     }
 
+    @Test(expected = NullPointerException.class)
+    public void shouldFailWhenAddingNullObject() {
+        CurrencyAmount currencyAmount = new CurrencyAmount(new BigDecimal("10.99"), "DKK");
+        CurrencyAmount sut = currencyAmount.add(null);
+    }
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWhenAddingDifferentCurrencies() {
-        CurrencyAmount ca1 = new CurrencyAmount(new BigDecimal("10.99"), "DKK");
-        CurrencyAmount ca2 = new CurrencyAmount(new BigDecimal("10"), "EUR");
+        CurrencyAmount currencyAmount = new CurrencyAmount(new BigDecimal("10.99"), "DKK");
+        CurrencyAmount currencyAmountToAdd = new CurrencyAmount(new BigDecimal("10"), "EUR");
 
-        CurrencyAmount sut = ca1.add(ca2);
+        CurrencyAmount sut = currencyAmount.add(currencyAmountToAdd);
 
     }
 
