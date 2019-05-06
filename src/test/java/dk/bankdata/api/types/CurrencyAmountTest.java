@@ -40,6 +40,7 @@ public class CurrencyAmountTest {
         CurrencyAmount currencyAmount = new CurrencyAmount(new BigDecimal("10.99"), "DKK");
         CurrencyAmount sut = currencyAmount.add(null);
     }
+
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailWhenAddingDifferentCurrencies() {
         CurrencyAmount currencyAmount = new CurrencyAmount(new BigDecimal("10.99"), "DKK");

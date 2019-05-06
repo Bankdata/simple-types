@@ -30,20 +30,6 @@ public class CurrencyAmount {
         return currency;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CurrencyAmount that = (CurrencyAmount) o;
-        return Objects.equals(amount, that.amount)
-                && Objects.equals(currency, that.currency);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(amount, currency);
-    }
-
     /**
      * Returns a CurrencyAmount whose value is: this + currencyAmount.
      * @param currencyAmount - the amount to add
@@ -57,5 +43,19 @@ public class CurrencyAmount {
         }
 
         return new CurrencyAmount(amount.add(currencyAmount.getAmount()), currency);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CurrencyAmount that = (CurrencyAmount) o;
+        return Objects.equals(amount, that.amount)
+                && Objects.equals(currency, that.currency);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(amount, currency);
     }
 }
