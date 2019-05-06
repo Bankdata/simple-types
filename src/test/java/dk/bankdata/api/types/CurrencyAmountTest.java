@@ -22,7 +22,7 @@ public class CurrencyAmountTest {
     }
 
     @Test
-    public void shouldAddAnotherCurrencyAmount(){
+    public void shouldAddAnotherCurrencyAmount() {
         CurrencyAmount ca1 = new CurrencyAmount(new BigDecimal("10.99"), "DKK");
         CurrencyAmount ca2 = new CurrencyAmount(new BigDecimal("10"), "DKK");
 
@@ -36,7 +36,7 @@ public class CurrencyAmountTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void shouldFailWhenAddingDifferentCurrencies(){
+    public void shouldFailWhenAddingDifferentCurrencies() {
         CurrencyAmount ca1 = new CurrencyAmount(new BigDecimal("10.99"), "DKK");
         CurrencyAmount ca2 = new CurrencyAmount(new BigDecimal("10"), "EUR");
 
