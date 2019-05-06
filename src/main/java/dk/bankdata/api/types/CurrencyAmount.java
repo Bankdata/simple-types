@@ -43,4 +43,17 @@ public class CurrencyAmount {
     public int hashCode() {
         return Objects.hash(amount, currency);
     }
+
+    /**
+     * @param currencyAmount - the amount to add
+     * @return a CurrencyAmount whose value is (this + currencyAmount) - using BigDecimal.add (so be aware of scale)
+     * @throws IllegalArgumentException if the currencies are not equal
+     */
+    public CurrencyAmount add(CurrencyAmount currencyAmount) {
+        if (!currency.equals(currencyAmount.getCurrency())){
+            throw new IllegalArgumentException("Can't add amounts with different currencies");
+        }
+        CurrencyAmount sum = new CurrencyAmount(amount.add(currencyAmount.getAmount()), currency);
+        return sum;
+    }
 }
