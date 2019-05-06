@@ -30,6 +30,21 @@ public class CurrencyAmount {
         return currency;
     }
 
+    /**
+     * Returns a CurrencyAmount whose value is: this + currencyAmount.
+     * @param currencyAmount - the amount to add
+     * @return a CurrencyAmount whose value is: this + currencyAmount - using BigDecimal.add (so be aware of scale)
+     * @throws IllegalArgumentException if the currencies are not equal
+     */
+    public CurrencyAmount add(CurrencyAmount currencyAmount) {
+        Objects.requireNonNull(currencyAmount, "CurrencyAmount must not be null");
+        if (!currency.equals(currencyAmount.getCurrency())) {
+            throw new IllegalArgumentException("Can't add amounts with different currencies");
+        }
+
+        return new CurrencyAmount(amount.add(currencyAmount.getAmount()), currency);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
