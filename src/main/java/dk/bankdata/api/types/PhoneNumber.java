@@ -9,7 +9,7 @@ public class PhoneNumber {
     public PhoneNumber(String phoneNumber) {
         String numberWithNoSpaces = phoneNumber.replace(" ", "");
 
-        if(phoneNumber.contains("+")) {
+        if (phoneNumber.contains("+")) {
             countryCode = numberWithNoSpaces.substring(0, 3);
             number = numberWithNoSpaces.substring(3);
         } else {
@@ -45,8 +45,8 @@ public class PhoneNumber {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PhoneNumber that = (PhoneNumber) o;
-        return countryCode.equals(that.countryCode) &&
-                number.equals(that.number);
+        return countryCode.equals(that.countryCode)
+                && number.equals(that.number);
     }
 
     @Override

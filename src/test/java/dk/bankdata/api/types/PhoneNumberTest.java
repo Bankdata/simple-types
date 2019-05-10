@@ -18,13 +18,13 @@ public class PhoneNumberTest {
         PhoneNumber p4o = new PhoneNumber(p4);
         PhoneNumber p5o = new PhoneNumber(p5);
 
-        String p1_3Result = "PhoneNumber{countryCode='+45', number='90909090'}";
+        String p123Result = "PhoneNumber{countryCode='+45', number='90909090'}";
         String p4Result = "PhoneNumber{countryCode='+45', number='12345678'}";
         String p5Result = "PhoneNumber{countryCode='+45', number='Tlfnr'}";
 
-        Assert.assertEquals(p1_3Result, p1o.toString());
-        Assert.assertEquals(p1_3Result, p2o.toString());
-        Assert.assertEquals(p1_3Result, p3o.toString());
+        Assert.assertEquals(p123Result, p1o.toString());
+        Assert.assertEquals(p123Result, p2o.toString());
+        Assert.assertEquals(p123Result, p3o.toString());
         Assert.assertEquals(p4Result, p4o.toString());
         Assert.assertEquals(p5Result, p5o.toString());
     }
