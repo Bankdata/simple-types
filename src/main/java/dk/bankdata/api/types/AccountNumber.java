@@ -1,5 +1,11 @@
 package dk.bankdata.api.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -17,7 +23,9 @@ public class AccountNumber implements Serializable {
     private final String regNo;
     private final String accountNo;
 
-    private AccountNumber(String regNo, String accountNo) {
+    @JsonCreator
+    private AccountNumber(@JsonProperty(value = "regNo", required = true) String regNo,
+                          @JsonProperty(value = "accountNo", required = true) String accountNo) {
         Objects.requireNonNull(regNo);
         Objects.requireNonNull(accountNo);
         this.regNo = regNo;
@@ -31,6 +39,8 @@ public class AccountNumber implements Serializable {
     public String getAccountNo() {
         return accountNo;
     }
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -52,6 +62,28 @@ public class AccountNumber implements Serializable {
     @Override
     public String toString() {
         return String.format("%1$s-%2$s", regNo, accountNo);
+    }
+
+    /**
+     * Generate a JSON representation of the account number.
+     * @return JSON representation of account number
+     * @throws JsonProcessingException if the generation of JSON fails
+     */
+    public String toJson() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(this);
+    }
+
+
+    /**
+     * Generate an Account instance from a JSON representation.
+     * @param jsonString JSON representation of account number
+     * @return Account instance representing account number
+     * @throws IOException if the given json string is not properly formatted
+     */
+    public static AccountNumber fromJson(String jsonString) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(jsonString, AccountNumber.class);
     }
 
     /**
