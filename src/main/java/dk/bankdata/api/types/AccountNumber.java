@@ -3,24 +3,22 @@ package dk.bankdata.api.types;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dk.bankdata.api.jaxrs.encryption.DecodingType;
 import dk.bankdata.api.jaxrs.encryption.EncodingType;
 import dk.bankdata.api.jaxrs.encryption.Encryption;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Representing (Danish) account number. Instances should be constructed using the <code>valueOf</code>
- * methods to ensure normalization of the properties.
- *
- * @see <a href="https://en.wikipedia.org/wiki/International_Bank_Account_Number">Bank Account Number</a>
- */
 public class AccountNumber implements Serializable {
     static final long serialVersionUID = 1L;
 
     private String regNo;
     private String accountNo;
+    private String shadowAccountId;
+
     private String publicId;
 
     public AccountNumber(String regNo, String accountNo) {
@@ -28,17 +26,10 @@ public class AccountNumber implements Serializable {
         this.accountNo = accountNo;
     }
 
-    public AccountNumber(String regNo, String accountNo, String encryptionKey) throws JsonProcessingException {
+    public AccountNumber(String regNo, String accountNo, String shadowAccountId) {
         this.regNo = regNo;
         this.accountNo = accountNo;
-        this.publicId = generatePublicId(encryptionKey);
-    }
-
-    private String generatePublicId(String encryptionKey) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Encryption encryption = new Encryption(encryptionKey);
-
-        return encryption.encrypt(objectMapper.writeValueAsString(this), EncodingType.URL_ENCODE);
+        this.shadowAccountId = shadowAccountId;
     }
 
     public String getRegNo() {
@@ -73,6 +64,18 @@ public class AccountNumber implements Serializable {
     @Override
     public String toString() {
         return String.format("%1$s-%2$s", regNo, accountNo);
+    }
+
+    public boolean isShadowAccount() {
+        return shadowAccountId != null || !shadowAccountId.equals("");
+    }
+
+    public static AccountNumber decrypt(String publicId, String cipherKey) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Encryption encryption = new Encryption(cipherKey);
+        String decrypted = encryption.decrypt(publicId, DecodingType.URL_ENCODE);
+
+        return objectMapper.readValue(decrypted, AccountNumber.class);
     }
 
     /**
@@ -110,6 +113,13 @@ public class AccountNumber implements Serializable {
      */
     public static AccountNumber valueOf(int reg, long account) {
         return new AccountNumber(String.format("%04d", reg), String.format("%010d", account));
+    }
+
+    private String generatePublicId(String cipherKey) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Encryption encryption = new Encryption(cipherKey);
+
+        return encryption.encrypt(objectMapper.writeValueAsString(this), EncodingType.URL_ENCODE);
     }
 
 }
