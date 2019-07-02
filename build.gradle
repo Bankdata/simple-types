@@ -29,8 +29,11 @@ repositories {
 
 dependencies {
     compileOnly(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: project['com.fasterxml.jackson.version'])
+    compileOnly(group: 'dk.bankdata.jaxrs', name: 'security', version: project ['dk.bankdata.jaxrs.security.version'])
     testCompile(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: project['com.fasterxml.jackson.version'])
+    testCompile(group: 'dk.bankdata.jaxrs', name: 'security', version: project ['dk.bankdata.jaxrs.security.version'])
     testCompile(group: 'junit', name: 'junit', version: project['junit.version'])
+
 }
 
 model {

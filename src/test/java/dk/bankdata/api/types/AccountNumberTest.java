@@ -1,12 +1,11 @@
 package dk.bankdata.api.types;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import java.io.IOException;
+import dk.bankdata.api.jaxrs.encryption.DecodingType;
+import dk.bankdata.api.jaxrs.encryption.Encryption;
 import org.junit.Test;
-
 
 public class AccountNumberTest {
 
@@ -52,20 +51,21 @@ public class AccountNumberTest {
     }
 
     @Test
-    public void testShouldReturnJson() throws JsonProcessingException {
-        String regNo = "1234";
-        String accountNo = "1234567890";
-        AccountNumber sut = AccountNumber.valueOf(regNo, accountNo);
-        assertEquals("{\"regNo\":\"" + regNo + "\",\"accountNo\":\"" + accountNo + "\"}", sut.toJson());
+    public void shouldGeneratePublicId() throws JsonProcessingException {
+        AccountNumber adv = new AccountNumber("regno", "accountno",
+                "ThisIsPossiblyTheWorstCreatedKey");
+
+        assertNotNull(adv.getPublicId());
+        assertEquals("Wom91L4-Ww1h1oaTo61YFvZhXan_BgKeUc0LdOdHaz4XHX3lOqvhZCBFVXXwtI0my-brirbEmlcaSjxQzg0lHA==", adv.getPublicId());
     }
 
     @Test
-    public void testShouldReturnAccountNumber() throws IOException {
-        String regNo = "1234";
-        String accountNo = "1234567890";
-        AccountNumber accountNumber = AccountNumber.valueOf(regNo, accountNo);
-        AccountNumber sut = AccountNumber.fromJson("{\"regNo\":\"" + regNo + "\",\"accountNo\":\"" + accountNo + "\"}");
-        assertEquals(accountNumber, sut);
-    }
+    public void shouldDecrypt() {
+        String seed = "Wom91L4-Ww1h1oaTo61YFvZhXan_BgKeUc0LdOdHaz4XHX3lOqvhZCBFVXXwtI0my-brirbEmlcaSjxQzg0lHA==";
 
+        Encryption encryption = new Encryption("ThisIsPossiblyTheWorstCreatedKey");
+        String json = encryption.decrypt(seed, DecodingType.URL_ENCODE);
+
+        assertEquals("{\"regNo\":\"regno\",\"accountNo\":\"accountno\",\"publicId\":null}", json);
+    }
 }
