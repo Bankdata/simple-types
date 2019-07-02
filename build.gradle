@@ -29,6 +29,7 @@ repositories {
 
 dependencies {
     compileOnly(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: project['com.fasterxml.jackson.version'])
+    compileOnly(group: 'javax.validation', name: 'validation-api', version: project['javax.validation.version'])
     testCompile(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: project['com.fasterxml.jackson.version'])
     testCompile(group: 'junit', name: 'junit', version: project['junit.version'])
 }

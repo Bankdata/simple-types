@@ -1,6 +1,8 @@
 package dk.bankdata.api.types;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
+
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
@@ -42,10 +44,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>Extension members may also be added by utilizing the builder.
  */
 public class ProblemDetails {
-
+    @NotNull(message = "Type has to be populated")
     private final URI type;
+    @NotNull(message = "Title has to be populated")
     private final String title;
+    @NotNull(message = "Status has to be populated")
     private final Integer status;
+    @NotNull(message = "Detail has to be populated")
     private final String detail;
     private final URI instance;
     private final Map<String, ?> extension;
