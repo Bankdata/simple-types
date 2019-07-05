@@ -1,15 +1,13 @@
 package dk.bankdata.api.types;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dk.bankdata.api.jaxrs.encryption.EncodingType;
+import dk.bankdata.api.jaxrs.encryption.Encryption;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Representing (Danish) account number. Instances should be constructed using the <code>valueOf</code>
@@ -22,14 +20,14 @@ public class AccountNumber implements Serializable {
 
     private final String regNo;
     private final String accountNo;
+    private final String shadowAccountId;
+    private final String publicId;
 
-    @JsonCreator
-    private AccountNumber(@JsonProperty(value = "regNo", required = true) String regNo,
-                          @JsonProperty(value = "accountNo", required = true) String accountNo) {
-        Objects.requireNonNull(regNo);
-        Objects.requireNonNull(accountNo);
-        this.regNo = regNo;
-        this.accountNo = accountNo;
+    private AccountNumber(Builder<?> builder) {
+        this.regNo = builder.regNo;
+        this.accountNo = builder.accountNo;
+        this.shadowAccountId = builder.shadowAccountId;
+        this.publicId = builder.publicId;
     }
 
     public String getRegNo() {
@@ -40,20 +38,12 @@ public class AccountNumber implements Serializable {
         return accountNo;
     }
 
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AccountNumber accountId = (AccountNumber) o;
-        return regNo.equals(accountId.regNo)
-                && accountNo.equals(accountId.accountNo);
+    public String getShadowAccountId() {
+        return shadowAccountId;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(regNo, accountNo);
+    public String getPublicId() {
+        return publicId;
     }
 
     /**
@@ -69,11 +59,10 @@ public class AccountNumber implements Serializable {
      * @return JSON representation of account number
      * @throws JsonProcessingException if the generation of JSON fails
      */
-    public String toJson() throws JsonProcessingException {
+    private String toJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(this);
     }
-
 
     /**
      * Generate an Account instance from a JSON representation.
@@ -81,46 +70,47 @@ public class AccountNumber implements Serializable {
      * @return Account instance representing account number
      * @throws IOException if the given json string is not properly formatted
      */
-    public static AccountNumber fromJson(String jsonString) throws IOException {
+    private static AccountNumber fromJson(String jsonString) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(jsonString, AccountNumber.class);
     }
 
-    /**
-     * Parse a string representation of Danish account number on the form <code>reg-account</code>.
-     * @param id String representation of account number
-     * @return Account instance representing account number
-     * @throws IllegalArgumentException if the given string is not properly formatted
-     */
-    public static AccountNumber valueOf(String id) throws IllegalArgumentException {
-        Pattern p = Pattern.compile("(\\d+)-(\\d+)");
-        Matcher m = p.matcher(id);
-        if (m.matches()) {
-            return valueOf(Integer.valueOf(m.group(1)), Long.valueOf(m.group(2)));
-        } else {
-            throw new IllegalArgumentException("Unable to match id: " + id);
+    public static class Builder<T extends Builder<T>> {
+        private String regNo;
+        private String accountNo;
+        private String shadowAccountId;
+        private String publicId;
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        private String cipherKey;
+
+        public Builder<T> regNo(String regNo) {
+            this.regNo = regNo;
+            return this;
+        }
+
+        public Builder<T> accountNo(String accountNo) {
+            this.accountNo = accountNo;
+            return this;
+        }
+
+        public Builder<T> shadowAccountId(String shadowAccountId) {
+            this.shadowAccountId = shadowAccountId;
+            return this;
+        }
+
+        public Builder<T> cipherKey(String cipherKey) {
+            this.cipherKey = cipherKey;
+            return this;
+        }
+
+        public AccountNumber build() throws JsonProcessingException {
+            if (this.cipherKey != null) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                Encryption encryption = new Encryption(this.cipherKey);
+                this.publicId = encryption.encrypt(objectMapper.writeValueAsString(this), EncodingType.URL_ENCODE);
+            }
+
+            return new AccountNumber(this);
         }
     }
-
-    /**
-     * Return {@link AccountNumber} based on string registration number and string account number.
-     * @param reg Registration number
-     * @param account Account number
-     * @return new account number instance
-     * @throws NumberFormatException if given strings cannot be parsed into number
-     */
-    public static AccountNumber valueOf(String reg, String account) throws NumberFormatException {
-        return valueOf(Integer.valueOf(reg), Long.valueOf(account));
-    }
-
-    /**
-     * Return {@link AccountNumber} based on registration number (bank identifier) and account number.
-     * @param reg Registration number
-     * @param account Account number
-     * @return new account number instance
-     */
-    public static AccountNumber valueOf(int reg, long account) {
-        return new AccountNumber(String.format("%04d", reg), String.format("%010d", account));
-    }
-
 }
