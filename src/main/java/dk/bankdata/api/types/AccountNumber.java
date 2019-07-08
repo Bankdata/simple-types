@@ -1,13 +1,16 @@
 package dk.bankdata.api.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dk.bankdata.api.jaxrs.encryption.DecodingType;
 import dk.bankdata.api.jaxrs.encryption.EncodingType;
 import dk.bankdata.api.jaxrs.encryption.Encryption;
 
 import java.io.IOException;
 import java.io.Serializable;
+import javax.validation.constraints.NotNull;
 
 /**
  * Representing (Danish) account number. Instances should be constructed using the <code>valueOf</code>
@@ -18,10 +21,25 @@ import java.io.Serializable;
 public class AccountNumber implements Serializable {
     static final long serialVersionUID = 1L;
 
+    @NotNull
     private final String regNo;
+    @NotNull
     private final String accountNo;
+
     private final String shadowAccountId;
     private final String publicId;
+
+    @JsonCreator
+    private AccountNumber(@JsonProperty("regNo") String regNo,
+                          @JsonProperty("accountNo") String accountNo,
+                          @JsonProperty("shadowAccountId") String shadowAccountId,
+                          @JsonProperty("publicId") String publicId) {
+
+        this.regNo = regNo;
+        this.accountNo = accountNo;
+        this.shadowAccountId = shadowAccountId;
+        this.publicId = publicId;
+    }
 
     private AccountNumber(Builder<?> builder) {
         this.regNo = builder.regNo;
@@ -46,6 +64,18 @@ public class AccountNumber implements Serializable {
         return publicId;
     }
 
+    public boolean isShadowAccount() {
+        return shadowAccountId != null && !shadowAccountId.isEmpty();
+    }
+
+    public static AccountNumber decrypt(String cipherKey, String publicId) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Encryption encryption = new Encryption(cipherKey);
+        String decrypted = encryption.decrypt(publicId, DecodingType.URL_ENCODE);
+
+        return objectMapper.readValue(decrypted, AccountNumber.class);
+    }
+
     /**
      * String representation of account number on the form of <code>reg-account</code>.
      */
@@ -54,33 +84,16 @@ public class AccountNumber implements Serializable {
         return String.format("%1$s-%2$s", regNo, accountNo);
     }
 
-    /**
-     * Generate a JSON representation of the account number.
-     * @return JSON representation of account number
-     * @throws JsonProcessingException if the generation of JSON fails
-     */
-    private String toJson() throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(this);
-    }
-
-    /**
-     * Generate an Account instance from a JSON representation.
-     * @param jsonString JSON representation of account number
-     * @return Account instance representing account number
-     * @throws IOException if the given json string is not properly formatted
-     */
-    private static AccountNumber fromJson(String jsonString) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(jsonString, AccountNumber.class);
-    }
-
     public static class Builder<T extends Builder<T>> {
+        @JsonProperty("regNo")
         private String regNo;
+        @JsonProperty("accountNo")
         private String accountNo;
+        @JsonProperty("shadowAccountId")
         private String shadowAccountId;
+        @JsonProperty("publicId")
         private String publicId;
-        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+
         private String cipherKey;
 
         public Builder<T> regNo(String regNo) {
