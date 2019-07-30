@@ -4,32 +4,42 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dk.bankdata.api.jaxrs.encryption.DecodingType;
+import dk.bankdata.api.jaxrs.encryption.EncodingType;
+import dk.bankdata.api.jaxrs.encryption.Encryption;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.validation.constraints.NotNull;
 
-/**
- * Representing (Danish) account number. Instances should be constructed using the <code>valueOf</code>
- * methods to ensure normalization of the properties.
- *
- * @see <a href="https://en.wikipedia.org/wiki/International_Bank_Account_Number">Bank Account Number</a>
- */
 public class AccountNumber implements Serializable {
     static final long serialVersionUID = 1L;
 
+    @NotNull
     private final String regNo;
+    @NotNull
     private final String accountNo;
 
+    private final String shadowAccountId;
+    private final String publicId;
+
     @JsonCreator
-    private AccountNumber(@JsonProperty(value = "regNo", required = true) String regNo,
-                          @JsonProperty(value = "accountNo", required = true) String accountNo) {
-        Objects.requireNonNull(regNo);
-        Objects.requireNonNull(accountNo);
+    private AccountNumber(@JsonProperty("regNo") String regNo,
+                          @JsonProperty("accountNo") String accountNo,
+                          @JsonProperty("shadowAccountId") String shadowAccountId,
+                          @JsonProperty("publicId") String publicId) {
+
         this.regNo = regNo;
         this.accountNo = accountNo;
+        this.shadowAccountId = shadowAccountId;
+        this.publicId = publicId;
+    }
+
+    private AccountNumber(Builder<?> builder) {
+        this.regNo = builder.regNo;
+        this.accountNo = builder.accountNo;
+        this.shadowAccountId = builder.shadowAccountId;
+        this.publicId = builder.publicId;
     }
 
     public String getRegNo() {
@@ -40,87 +50,76 @@ public class AccountNumber implements Serializable {
         return accountNo;
     }
 
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AccountNumber accountId = (AccountNumber) o;
-        return regNo.equals(accountId.regNo)
-                && accountNo.equals(accountId.accountNo);
+    public String getShadowAccountId() {
+        return shadowAccountId;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(regNo, accountNo);
+    public String getPublicId() {
+        return publicId;
     }
 
-    /**
-     * String representation of account number on the form of <code>reg-account</code>.
-     */
+    public boolean isShadowAccount() {
+        return shadowAccountId != null && !shadowAccountId.isEmpty();
+    }
+
+    public static AccountNumber decrypt(String cipherKey, String publicId) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Encryption encryption = new Encryption(cipherKey);
+        String decrypted = encryption.decrypt(publicId, DecodingType.URL_ENCODE);
+
+        return objectMapper.readValue(decrypted, AccountNumber.class);
+    }
+
     @Override
     public String toString() {
-        return String.format("%1$s-%2$s", regNo, accountNo);
+        return "AccountNumber{" +
+                "regNo='" + regNo + '\'' +
+                ", accountNo='" + accountNo + '\'' +
+                ", shadowAccountId='" + shadowAccountId + '\'' +
+                ", publicId='" + publicId + '\'' +
+                '}';
     }
 
-    /**
-     * Generate a JSON representation of the account number.
-     * @return JSON representation of account number
-     * @throws JsonProcessingException if the generation of JSON fails
-     */
-    public String toJson() throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(this);
-    }
+    public static class Builder<T extends Builder<T>> {
+        @JsonProperty("regNo")
+        private String regNo;
+        @JsonProperty("accountNo")
+        private String accountNo;
+        @JsonProperty("shadowAccountId")
+        private String shadowAccountId;
+        @JsonProperty("publicId")
+        private String publicId;
 
+        private String cipherKey;
 
-    /**
-     * Generate an Account instance from a JSON representation.
-     * @param jsonString JSON representation of account number
-     * @return Account instance representing account number
-     * @throws IOException if the given json string is not properly formatted
-     */
-    public static AccountNumber fromJson(String jsonString) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(jsonString, AccountNumber.class);
-    }
+        public Builder<T> regNo(String regNo) {
+            this.regNo = regNo;
+            return this;
+        }
 
-    /**
-     * Parse a string representation of Danish account number on the form <code>reg-account</code>.
-     * @param id String representation of account number
-     * @return Account instance representing account number
-     * @throws IllegalArgumentException if the given string is not properly formatted
-     */
-    public static AccountNumber valueOf(String id) throws IllegalArgumentException {
-        Pattern p = Pattern.compile("(\\d+)-(\\d+)");
-        Matcher m = p.matcher(id);
-        if (m.matches()) {
-            return valueOf(Integer.valueOf(m.group(1)), Long.valueOf(m.group(2)));
-        } else {
-            throw new IllegalArgumentException("Unable to match id: " + id);
+        public Builder<T> accountNo(String accountNo) {
+            this.accountNo = accountNo;
+            return this;
+        }
+
+        public Builder<T> shadowAccountId(String shadowAccountId) {
+            this.shadowAccountId = shadowAccountId;
+            return this;
+        }
+
+        public Builder<T> cipherKey(String cipherKey) {
+            this.cipherKey = cipherKey;
+            return this;
+        }
+
+        public AccountNumber build() throws JsonProcessingException {
+            if (this.cipherKey != null) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                Encryption encryption = new Encryption(this.cipherKey);
+                this.publicId = encryption.encrypt(objectMapper.writeValueAsString(this), EncodingType.URL_ENCODE);
+            }
+
+            return new AccountNumber(this);
         }
     }
-
-    /**
-     * Return {@link AccountNumber} based on string registration number and string account number.
-     * @param reg Registration number
-     * @param account Account number
-     * @return new account number instance
-     * @throws NumberFormatException if given strings cannot be parsed into number
-     */
-    public static AccountNumber valueOf(String reg, String account) throws NumberFormatException {
-        return valueOf(Integer.valueOf(reg), Long.valueOf(account));
-    }
-
-    /**
-     * Return {@link AccountNumber} based on registration number (bank identifier) and account number.
-     * @param reg Registration number
-     * @param account Account number
-     * @return new account number instance
-     */
-    public static AccountNumber valueOf(int reg, long account) {
-        return new AccountNumber(String.format("%04d", reg), String.format("%010d", account));
-    }
-
 }

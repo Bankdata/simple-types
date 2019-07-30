@@ -2,11 +2,12 @@ package dk.bankdata.api.types;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 
-import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * Implementation of <a href="https://tools.ietf.org/html/rfc7807">RFC 7807 - Problem Details for HTTP APIs</a>.
