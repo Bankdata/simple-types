@@ -12,12 +12,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 
-/**
- * Representing (Danish) account number. Instances should be constructed using the <code>valueOf</code>
- * methods to ensure normalization of the properties.
- *
- * @see <a href="https://en.wikipedia.org/wiki/International_Bank_Account_Number">Bank Account Number</a>
- */
 public class AccountNumber implements Serializable {
     static final long serialVersionUID = 1L;
 
@@ -76,12 +70,14 @@ public class AccountNumber implements Serializable {
         return objectMapper.readValue(decrypted, AccountNumber.class);
     }
 
-    /**
-     * String representation of account number on the form of <code>reg-account</code>.
-     */
     @Override
     public String toString() {
-        return String.format("%1$s-%2$s", regNo, accountNo);
+        return "AccountNumber{" +
+                "regNo='" + regNo + '\'' +
+                ", accountNo='" + accountNo + '\'' +
+                ", shadowAccountId='" + shadowAccountId + '\'' +
+                ", publicId='" + publicId + '\'' +
+                '}';
     }
 
     public static class Builder<T extends Builder<T>> {

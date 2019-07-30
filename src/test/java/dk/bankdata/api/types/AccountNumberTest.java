@@ -102,4 +102,12 @@ public class AccountNumberTest {
         Assert.assertNull(decrypted.getPublicId());
 
     }
+
+    @Test
+    public void shouldFailCreation() throws Exception {
+        AccountNumber number = new AccountNumber.Builder()
+                .regNo("some-regno")
+                .shadowAccountId("some-id")
+                .build();
+    }
 }
