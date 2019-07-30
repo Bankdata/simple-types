@@ -110,4 +110,23 @@ public class AccountNumberTest {
                 .shadowAccountId("some-id")
                 .build();
     }
+
+    @Test
+    public void shouldReturnStringOfAccountNumber() throws Exception {
+        AccountNumber number = new AccountNumber.Builder()
+                .regNo("some-regno")
+                .accountNo("some-accountno")
+                .shadowAccountId("some-shadowAccountId")
+                .cipherKey("ThisIsPossiblyTheWorstCreatedKey")
+                .build();
+
+        Assert.assertEquals(
+                "AccountNumber{regNo='some-regno', accountNo='some-accountno', " +
+                        "shadowAccountId='some-shadowAccountId', " +
+                        "publicId='gSM4IML5DaaCi3ctaFlP1jrTbpByjMGH9iD28Z96i4gOti8cx0tiaBNwJyDV" +
+                        "-YHQj9GYU_OCMwvmh4t0gIv38PlXvMqlUbY7A4Zwan9EBhW_xOxtkZ3Zqneey0DXknf6qV8V" +
+                        "-wBFGg5wT-GzHrRn7A=='}",
+                number.toString());
+
+    }
 }
