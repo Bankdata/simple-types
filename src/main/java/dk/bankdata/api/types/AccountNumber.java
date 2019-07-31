@@ -112,11 +112,16 @@ public class AccountNumber implements Serializable {
             return this;
         }
 
-        public AccountNumber build() throws JsonProcessingException {
+        public AccountNumber build() throws IllegalArgumentException {
             if (this.cipherKey != null) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 Encryption encryption = new Encryption(this.cipherKey);
-                this.publicId = encryption.encrypt(objectMapper.writeValueAsString(this), EncodingType.URL_ENCODE);
+
+                try {
+                    this.publicId = encryption.encrypt(objectMapper.writeValueAsString(this), EncodingType.URL_ENCODE);
+                } catch (JsonProcessingException e) {
+                    throw new IllegalArgumentException(e);
+                }
             }
 
             return new AccountNumber(this);
