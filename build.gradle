@@ -147,9 +147,9 @@ def customizePom(pom) {
             }
             developers {
                 developer {
-                    id 'lange'
-                    name 'Thor Anker Kvisgård Lange'
-                    email 'tel@bankdata.dk'
+                    id 'bogedal'
+                    name 'Kenneth Bøgedal'
+                    email 'kbh@bankdata.dk'
                     organization 'Bankdata'
                     organizationUrl 'https://www.bankdata.dk'
                 }
