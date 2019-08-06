@@ -14,6 +14,42 @@ serialization.
 
 The library is deployed to Maven Central `dk.bankdata.api:types` and may be used from both Gradle or Maven.
 
+## AccountNumber
+AccountNumber represents a danish account along with an encryption and decryption option.
+
+```java
+AccountNumber number = new AccountNumber.Builder()
+    .regNo("some-regno")
+    .accountNo("some-accountno")
+    .shadowAccountId("some-shadowAccountId")
+    .cipherKey("ThisIsPossiblyTheWorstCreatedKey")
+    .build();
+
+```
+
+Which will be serialized as 
+
+```json
+{
+  "regNo": "some-regno", 
+  "accountNo": "some-accountno",
+  "shadowAccountId": "some-shadowAccountId",
+  "publicId": "gSM4IML5DaaCi3ctaFlP1jrTbpByjMGH9iD28Z96i4gOti8cx0tiaBNwJyDV-YHQj9GYU_OCMwvmh4t0gIv38PlXvMqlUbY7A4Zwan9EBhW_xOxtkZ3Zqneey0DXknf6qV8V-wBFGg5wT-GzHrRn7A=='
+}
+```
+
+<b>NOTE</b>: a publicId will only be generated if a cipherKey has been supplied
+
+To decrypt a publicId use the following method
+
+```java
+AccountNumber decrypted = AccountNumber
+    .decrypt("ThisIsPossiblyTheWorstCreatedKey", 
+              number.getPublicId()
+);
+
+```
+
 ## Problem Details
 
 The library contains an implementation of [RFC 7807 - Problem Details for HTTP APIs](https://tools.ietf.org/html/rfc7807) which
@@ -81,3 +117,4 @@ class POJO {
     Instant dateTime;
 }
 ```
+
