@@ -44,6 +44,7 @@ import javax.validation.constraints.NotNull;
  *
  * <p>Extension members may also be added by utilizing the builder.
  */
+@Deprecated
 public class ProblemDetails {
     @NotNull(message = "Type has to be populated")
     private final URI type;
@@ -121,6 +122,7 @@ public class ProblemDetails {
     }
     
     @SuppressWarnings("unchecked")
+    @Deprecated
     public static class Builder<T extends Builder<T>> {
         private URI type = URI.create("about:blank");
         private String title;
