@@ -35,6 +35,13 @@ public class CurrencyAmountTest {
 
     }
 
+    @Test
+    public void shouldReturnZeroIfAmountIsNull() {
+        CurrencyAmount currencyAmount = new CurrencyAmount(null, "DKK");
+
+        assertEquals(BigDecimal.ZERO, currencyAmount.getAmount());
+    }
+
     @Test(expected = NullPointerException.class)
     public void shouldFailWhenAddingNullObject() {
         CurrencyAmount currencyAmount = new CurrencyAmount(new BigDecimal("10.99"), "DKK");

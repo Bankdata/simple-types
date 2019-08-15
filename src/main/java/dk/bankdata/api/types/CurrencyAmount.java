@@ -18,7 +18,7 @@ public class CurrencyAmount {
         if (!CURRENCY_PATTERN.matcher(currency).matches()) {
             throw new IllegalArgumentException("Invalid currency code: " + currency);
         }
-        this.amount = amount;
+        this.amount = amount != null ? amount : BigDecimal.ZERO;
         this.currency = currency;
     }
 
