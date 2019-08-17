@@ -6,14 +6,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.validation.constraints.NotNull;
 
-/**
- * MessageId : Identifies the messages to be handled in the frontend. fx app.area.function
- * This will both cover the key to the translation and
- * a way for the frontend to identify and deal with certain messages in a specific way
- * Status : The http error code
- * Details : details are used the debug and logging
- * Extensions : values that can be merged into the message in the spa (optional)
- */
 public class ErrorDetails {
     @NotNull(message = "MessageId has to be populated")
     private final String messageId;
@@ -47,6 +39,14 @@ public class ErrorDetails {
         return extension;
     }
 
+    /**
+     * MessageId : Identifies the messages to be handled in the frontend. fx app.area.function
+     * This will both cover the key to the translation and
+     * a way for the frontend to identify and deal with certain messages in a specific way
+     * Status : The http error code
+     * Details : details are used the debug and logging
+     * Extensions : values that can be merged into the message in the spa (optional)
+     */
     @SuppressWarnings("unchecked")
     public static class Builder<T extends ErrorDetails.Builder<T>> {
         private String messageId;
