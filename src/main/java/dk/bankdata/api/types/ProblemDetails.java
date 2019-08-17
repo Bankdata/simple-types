@@ -10,12 +10,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.validation.constraints.NotNull;
 
 /**
- * @deprecated
- * This class is not longer supported and have been flagged for removal
- * <p> Use {@link ErrorDetails} instead
- *
  * Implementation of <a href="https://tools.ietf.org/html/rfc7807">RFC 7807 - Problem Details for HTTP APIs</a>.
  * The class may be extended to allow for extension members by extending {@link ProblemDetails} and {@link ProblemDetails.Builder}
+ *
+ * @deprecated
+ * This class is not longer supported and have been flagged for removal
+ *
+ * <p>Use {@link ErrorDetails} instead</p>
+ *
  * <code>
  * public class ProblemDetailsExtension extends ProblemDetails {
  *
@@ -46,7 +48,7 @@ import javax.validation.constraints.NotNull;
  * }
  * </code>
  *
- * <p>Extension members may also be added by utilizing the builder.
+ * <p>Extension members may also be added by utilizing the builder.</p>
  */
 @Deprecated
 public class ProblemDetails {
