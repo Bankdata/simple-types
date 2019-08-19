@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import org.junit.Test;
 
+@Deprecated
 public class ProblemDetailsTest {
     @Test
     public void testSerialization() throws Exception {

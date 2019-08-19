@@ -50,19 +50,16 @@ AccountNumber decrypted = AccountNumber
 
 ```
 
-## Problem Details
+## Error Details
 
-The library contains an implementation of [RFC 7807 - Problem Details for HTTP APIs](https://tools.ietf.org/html/rfc7807) which
-can be used in responses of type `application/problem+json` as follows.
+Error details can be used in responses of type `application/error+json` as follows.
 
 ```java
-ProblemDetails problem = new ProblemDetails.Builder()
-    .type(URI.create("https://type"))
-    .title("Error Occurred")
-    .detail("An unrecoverable error occurred")
+ErrorDetails error = new ErrorDetails.Builder()
+    .messageId("app.area.sub")
     .status(500)
-    .instance(URI.create("https://instance/1"))
-    .extensionMember("balance", 23)
+    .detail("An unrecoverable error occurred")
+    .extension("balance", 23)
     .build();
 ```
 
@@ -70,11 +67,9 @@ Which will be serialized as:
 
 ```json
 {
-  "type": "https://type",
-  "title": "Error Occurred",
-  "detail": "An unrecoverable error occurred",
+  "messageID": "app.area.sub",
   "status": 500,
-  "instance": "https://instance/1",
+  "detail": "An unrecoverable error occurred",
   "balance": 23
 }
 ```
