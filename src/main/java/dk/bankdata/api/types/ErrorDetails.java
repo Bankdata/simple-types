@@ -39,6 +39,16 @@ public class ErrorDetails {
         return extension;
     }
 
+    @Override
+    public String toString() {
+        return "ErrorDetails{" +
+                "messageId='" + messageId + '\'' +
+                ", status=" + status +
+                ", detail='" + detail + '\'' +
+                ", extension=" + extension +
+                '}';
+    }
+
     /**
      * MessageId : Identifies the messages to be handled in the frontend. fx app.area.function
      * This will both cover the key to the translation and
