@@ -81,17 +81,17 @@ public class AccountNumber implements Serializable {
             return false;
         }
         AccountNumber that = (AccountNumber) o;
-        return regNo.equals(that.regNo) &&
-            accountNo.equals(that.accountNo) &&
-            Objects.equals(shadowAccountId, that.shadowAccountId);
+        return regNo.equals(that.regNo)
+            && accountNo.equals(that.accountNo)
+            && Objects.equals(shadowAccountId, that.shadowAccountId);
     }
 
 
     /**
      * Compare if regNo and accountNo are equals.
-     * @param accountNumber
+     * @param accountNumber to compare
      * @return true if the regNo and accountNo are equals. Note the shadowaccountId is not part of this
-     * comparison. If this is needed use the equal method instead.
+     *     comparison. If this is needed use the equal method instead.
      */
     public boolean isSameRegNoAndAccountNo(AccountNumber accountNumber) {
         if (this == accountNumber) {
@@ -100,8 +100,8 @@ public class AccountNumber implements Serializable {
         if (accountNumber == null) {
             return false;
         }
-        return regNo.equals(accountNumber.regNo) &&
-            accountNo.equals(accountNumber.accountNo);
+        return regNo.equals(accountNumber.regNo)
+            && accountNo.equals(accountNumber.accountNo);
     }
 
     @Override
