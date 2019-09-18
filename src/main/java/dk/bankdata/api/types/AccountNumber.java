@@ -10,9 +10,11 @@ import dk.bankdata.api.jaxrs.encryption.Encryption;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.validation.constraints.NotNull;
 
 public class AccountNumber implements Serializable {
+
     static final long serialVersionUID = 1L;
 
     @NotNull
@@ -25,9 +27,9 @@ public class AccountNumber implements Serializable {
 
     @JsonCreator
     private AccountNumber(@JsonProperty("regNo") String regNo,
-                          @JsonProperty("accountNo") String accountNo,
-                          @JsonProperty("shadowAccountId") String shadowAccountId,
-                          @JsonProperty("publicId") String publicId) {
+        @JsonProperty("accountNo") String accountNo,
+        @JsonProperty("shadowAccountId") String shadowAccountId,
+        @JsonProperty("publicId") String publicId) {
 
         this.regNo = regNo;
         this.accountNo = accountNo;
@@ -71,16 +73,55 @@ public class AccountNumber implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "AccountNumber{" +
-                "regNo='" + regNo + '\'' +
-                ", accountNo='" + accountNo + '\'' +
-                ", shadowAccountId='" + shadowAccountId + '\'' +
-                ", publicId='" + publicId + '\'' +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AccountNumber that = (AccountNumber) o;
+        return regNo.equals(that.regNo)
+            && accountNo.equals(that.accountNo)
+            && Objects.equals(shadowAccountId, that.shadowAccountId);
     }
 
+
+    /**
+     * Compare if regNo and accountNo are equals.
+     * @param accountNumber to compare
+     * @return true if the regNo and accountNo are equals. Note the shadowaccountId is not part of this
+     *     comparison. If this is needed use the equal method instead.
+     */
+    public boolean isSameRegNoAndAccountNo(AccountNumber accountNumber) {
+        if (this == accountNumber) {
+            return true;
+        }
+        if (accountNumber == null) {
+            return false;
+        }
+        return regNo.equals(accountNumber.regNo)
+            && accountNo.equals(accountNumber.accountNo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(regNo, accountNo, shadowAccountId);
+    }
+
+    @Override
+    public String toString() {
+        return "AccountNumber{" +
+            "regNo='" + regNo + '\'' +
+            ", accountNo='" + accountNo + '\'' +
+            ", shadowAccountId='" + shadowAccountId + '\'' +
+            ", publicId='" + publicId + '\'' +
+            '}';
+    }
+
+
     public static class Builder<T extends Builder<T>> {
+
         @JsonProperty("regNo")
         private String regNo;
         @JsonProperty("accountNo")
