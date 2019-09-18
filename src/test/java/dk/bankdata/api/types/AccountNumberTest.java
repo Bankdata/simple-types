@@ -129,4 +129,115 @@ public class AccountNumberTest {
                 number.toString());
 
     }
+
+    @Test
+    public void shouldBeEqual() {
+        AccountNumber number = new AccountNumber.Builder()
+            .regNo("some-regno")
+            .accountNo("some-accountno")
+            .shadowAccountId("some-shadowAccountId")
+            .cipherKey("ThisIsPossiblyTheWorstCreatedKey")
+            .build();
+
+
+        AccountNumber number2 = new AccountNumber.Builder()
+            .regNo("some-regno")
+            .accountNo("some-accountno")
+            .shadowAccountId("some-shadowAccountId")
+            .build();
+
+        Assert.assertEquals(number, number2);
+    }
+
+    @Test
+    public void shouldNotBeEqualDifferentRegNo() {
+        AccountNumber number = new AccountNumber.Builder()
+            .regNo("some-regno")
+            .accountNo("some-accountno")
+            .shadowAccountId("some-shadowAccountId")
+            .cipherKey("ThisIsPossiblyTheWorstCreatedKey")
+            .build();
+
+
+        AccountNumber number2 = new AccountNumber.Builder()
+            .regNo("some-regno1")
+            .accountNo("some-accountno")
+            .shadowAccountId("some-shadowAccountId")
+            .build();
+
+        Assert.assertNotEquals(number, number2);
+    }
+
+    @Test
+    public void shouldNotBeEqualDifferentAccountNo() {
+        AccountNumber number = new AccountNumber.Builder()
+            .regNo("some-regno")
+            .accountNo("some-accountno")
+            .shadowAccountId("some-shadowAccountId")
+            .cipherKey("ThisIsPossiblyTheWorstCreatedKey")
+            .build();
+
+
+        AccountNumber number2 = new AccountNumber.Builder()
+            .regNo("some-regno")
+            .accountNo("some-accountno1")
+            .shadowAccountId("some-shadowAccountId")
+            .build();
+
+        Assert.assertNotEquals(number, number2);
+    }
+
+    @Test
+    public void shouldNotBeEqualDifferentShadowAccountId() {
+        AccountNumber number = new AccountNumber.Builder()
+            .regNo("some-regno")
+            .accountNo("some-accountno")
+            .shadowAccountId("some-shadowAccountId")
+            .cipherKey("ThisIsPossiblyTheWorstCreatedKey")
+            .build();
+
+
+        AccountNumber number2 = new AccountNumber.Builder()
+            .regNo("some-regno")
+            .accountNo("some-accountno")
+            .shadowAccountId("some-shadowAccountId1")
+            .build();
+
+        Assert.assertNotEquals(number, number2);
+    }
+
+    @Test
+    public void shouldBeEqualRegNoAndAccountNo() {
+        AccountNumber number = new AccountNumber.Builder()
+            .regNo("some-regno")
+            .accountNo("some-accountno")
+            .cipherKey("ThisIsPossiblyTheWorstCreatedKey")
+            .build();
+
+        AccountNumber number2 = new AccountNumber.Builder()
+            .regNo("some-regno")
+            .accountNo("some-accountno")
+            .shadowAccountId("some-shadowAccountId1")
+            .build();
+
+        Assert.assertTrue(number.isSameRegNoAndAccountNo(number2));
+    }
+
+    @Test
+    public void shouldNotBeEqualRegNoAndAccountNo() {
+        AccountNumber number = new AccountNumber.Builder()
+            .regNo("some-regno")
+            .accountNo("some-accountno")
+            .cipherKey("ThisIsPossiblyTheWorstCreatedKey")
+            .build();
+
+        AccountNumber number2 = new AccountNumber.Builder()
+            .regNo("some-regno1")
+            .accountNo("some-accountno")
+            .shadowAccountId("some-shadowAccountId1")
+            .build();
+
+        Assert.assertFalse(number.isSameRegNoAndAccountNo(number2));
+    }
+
 }
