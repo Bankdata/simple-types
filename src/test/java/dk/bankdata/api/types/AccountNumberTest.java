@@ -103,12 +103,14 @@ public class AccountNumberTest {
 
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void shouldFailCreation() throws Exception {
         AccountNumber number = new AccountNumber.Builder()
                 .regNo("some-regno")
                 .shadowAccountId("some-id")
                 .build();
+
+        Assert.fail("An NullPointerException should have been thrown.");
     }
 
     @Test
@@ -238,6 +240,23 @@ public class AccountNumberTest {
             .build();
 
         Assert.assertFalse(number.isSameRegNoAndAccountNo(number2));
+    }
+
+    @Test
+    public void shouldBeEqualEvenRegardingLeadingZeroesInRegNoAndAccountNo() {
+        AccountNumber number = new AccountNumber.Builder()
+            .regNo("00some-regno")
+            .accountNo("00some-accountno")
+            .cipherKey("ThisIsPossiblyTheWorstCreatedKey")
+            .build();
+
+        AccountNumber number2 = new AccountNumber.Builder()
+            .regNo("some-regno")
+            .accountNo("some-accountno")
+            .shadowAccountId("some-shadowAccountId1")
+            .build();
+
+        Assert.assertTrue(number.isSameRegNoAndAccountNo(number2));
     }
 
 }
