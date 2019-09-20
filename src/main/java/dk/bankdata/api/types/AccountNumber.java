@@ -89,7 +89,7 @@ public class AccountNumber implements Serializable {
      *
      * @param accountNumber to compare
      * @return true if the regNo and accountNo are equals. Note the shadowaccountId is not part of this comparison. If this is needed use
-     * the equal method instead.
+     *     the equal method instead.
      */
     public boolean isSameRegNoAndAccountNo(AccountNumber accountNumber) {
         if (this == accountNumber) {
