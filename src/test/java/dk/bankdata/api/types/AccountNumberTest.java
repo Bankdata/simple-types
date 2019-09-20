@@ -243,7 +243,7 @@ public class AccountNumberTest {
     }
 
     @Test
-    public void shouldBeEqualEvenRegardingLeadingZeroesInRegNoAndAccountNo() {
+    public void shouldBeEqualRegardlessLeadingZeroesInRegNoAndAccountNo() {
         AccountNumber number = new AccountNumber.Builder()
             .regNo("00some-regno")
             .accountNo("00some-accountno")
