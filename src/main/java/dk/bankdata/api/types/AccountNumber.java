@@ -31,17 +31,14 @@ public class AccountNumber implements Serializable {
         @JsonProperty("shadowAccountId") String shadowAccountId,
         @JsonProperty("publicId") String publicId) {
 
-        this.regNo = regNo;
-        this.accountNo = accountNo;
+        this.regNo = trimLeadingZeroes(regNo);
+        this.accountNo = trimLeadingZeroes(accountNo);
         this.shadowAccountId = shadowAccountId;
         this.publicId = publicId;
     }
 
     private AccountNumber(Builder<?> builder) {
-        this.regNo = builder.regNo;
-        this.accountNo = builder.accountNo;
-        this.shadowAccountId = builder.shadowAccountId;
-        this.publicId = builder.publicId;
+        this(builder.regNo, builder.accountNo, builder.shadowAccountId, builder.publicId);
     }
 
     public String getRegNo() {
@@ -89,9 +86,10 @@ public class AccountNumber implements Serializable {
 
     /**
      * Compare if regNo and accountNo are equals.
+     *
      * @param accountNumber to compare
-     * @return true if the regNo and accountNo are equals. Note the shadowaccountId is not part of this
-     *     comparison. If this is needed use the equal method instead.
+     * @return true if the regNo and accountNo are equals. Note the shadowaccountId is not part of this comparison. If this is needed use
+     *     the equal method instead.
      */
     public boolean isSameRegNoAndAccountNo(AccountNumber accountNumber) {
         if (this == accountNumber) {
@@ -119,6 +117,9 @@ public class AccountNumber implements Serializable {
             '}';
     }
 
+    private String trimLeadingZeroes(String stringToTrim) {
+        return stringToTrim.replaceFirst("^0+(?!$)", "");
+    }
 
     public static class Builder<T extends Builder<T>> {
 
@@ -154,6 +155,8 @@ public class AccountNumber implements Serializable {
         }
 
         public AccountNumber build() throws IllegalArgumentException {
+            Objects.requireNonNull(this.regNo);
+            Objects.requireNonNull(this.accountNo);
             if (this.cipherKey != null) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 Encryption encryption = new Encryption(this.cipherKey);
