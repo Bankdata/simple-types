@@ -13,7 +13,7 @@ public class CurrencyAmountTest {
     public void testSerialization() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         String serialized = mapper.writeValueAsString(new CurrencyAmount(BigDecimal.valueOf(123), "DKK"));
-        assertEquals("{\"amount\":123,\"currency\":\"DKK\"}", serialized);
+        assertEquals("{\"amount\":123,\"currencyCode\":\"DKK\"}", serialized);
     }
 
     @Test(expected = IllegalArgumentException.class)

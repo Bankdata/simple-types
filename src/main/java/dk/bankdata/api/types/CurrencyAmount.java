@@ -5,29 +5,29 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * Amount representation including currency code as specified by ISO 4217.
+ * Amount representation including currencyCode code as specified by ISO 4217.
  */
 public class CurrencyAmount {
 
     private static final Pattern CURRENCY_PATTERN = Pattern.compile("^[A-Z]{3}$");
 
     private final BigDecimal amount;
-    private final String currency;
+    private final String currencyCode;
 
-    public CurrencyAmount(BigDecimal amount, String currency) {
-        if (!CURRENCY_PATTERN.matcher(currency).matches()) {
-            throw new IllegalArgumentException("Invalid currency code: " + currency);
+    public CurrencyAmount(BigDecimal amount, String currencyCode) {
+        if (!CURRENCY_PATTERN.matcher(currencyCode).matches()) {
+            throw new IllegalArgumentException("Invalid currencyCode code: " + currencyCode);
         }
         this.amount = amount;
-        this.currency = currency;
+        this.currencyCode = currencyCode;
     }
 
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getCurrencyCode() {
+        return currencyCode;
     }
 
     /**
@@ -38,11 +38,11 @@ public class CurrencyAmount {
      */
     public CurrencyAmount add(CurrencyAmount currencyAmount) {
         Objects.requireNonNull(currencyAmount, "CurrencyAmount must not be null");
-        if (!currency.equals(currencyAmount.getCurrency())) {
+        if (!currencyCode.equals(currencyAmount.getCurrencyCode())) {
             throw new IllegalArgumentException("Can't add amounts with different currencies");
         }
 
-        return new CurrencyAmount(amount.add(currencyAmount.getAmount()), currency);
+        return new CurrencyAmount(amount.add(currencyAmount.getAmount()), currencyCode);
     }
 
     @Override
@@ -51,19 +51,19 @@ public class CurrencyAmount {
         if (o == null || getClass() != o.getClass()) return false;
         CurrencyAmount that = (CurrencyAmount) o;
         return Objects.equals(amount, that.amount)
-                && Objects.equals(currency, that.currency);
+                && Objects.equals(currencyCode, that.currencyCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(amount, currency);
+        return Objects.hash(amount, currencyCode);
     }
 
     @Override
     public String toString() {
         return "CurrencyAmount{" +
             "amount=" + amount +
-            ", currency='" + currency + '\'' +
+            ", currencyCode='" + currencyCode + '\'' +
             '}';
     }
 }

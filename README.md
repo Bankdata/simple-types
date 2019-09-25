@@ -79,12 +79,12 @@ _Note_ the use of extension members relies on Jackson serialization features.
 ## Amount with Currency
 
 The library contains a simple type for representing an amount with associated
-currency. Simply use `dk.bankdata.api.types.CurrencyAmount` which will be serialized
+currencyCode. Simply use `dk.bankdata.api.types.CurrencyAmount` which will be serialized
 to json as:
 ```json
 {
   "amount": 12345.12,
-  "currency": "DKK"
+  "currencyCode": "DKK"
 }
 ```
 
