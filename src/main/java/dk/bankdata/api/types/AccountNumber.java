@@ -1,6 +1,7 @@
 package dk.bankdata.api.types;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,6 +58,7 @@ public class AccountNumber implements Serializable {
         return publicId;
     }
 
+    @JsonIgnore
     public boolean isShadowAccount() {
         return shadowAccountId != null && !shadowAccountId.isEmpty();
     }
