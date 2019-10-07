@@ -46,8 +46,20 @@ public class AccountNumber implements Serializable {
         return regNo;
     }
 
+    @JsonIgnore
+    public String getFullRegNo() {
+        int regNo = Integer.parseInt(this.regNo);
+        return String.format("%04d", regNo);
+    }
+
     public String getAccountNo() {
         return accountNo;
+    }
+
+    @JsonIgnore
+    public String getFullAccountNo() {
+        long accountNo = Long.parseLong(this.accountNo);
+        return String.format("%010d", accountNo);
     }
 
     public String getShadowAccountId() {

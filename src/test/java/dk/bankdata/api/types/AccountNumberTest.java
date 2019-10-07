@@ -259,4 +259,23 @@ public class AccountNumberTest {
         Assert.assertTrue(number.isSameRegNoAndAccountNo(number2));
     }
 
+    @Test
+    public void shouldReturnFullRegNo() {
+        AccountNumber number = new AccountNumber.Builder()
+                .regNo("796")
+                .accountNo("12345")
+                .build();
+
+        Assert.assertEquals(4, number.getFullRegNo().length());
+    }
+
+    @Test
+    public void shouldReturnFullAccountNo() {
+        AccountNumber number = new AccountNumber.Builder()
+                .regNo("796")
+                .accountNo("12345")
+                .build();
+
+        Assert.assertEquals(10, number.getFullAccountNo().length());
+    }
 }
