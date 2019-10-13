@@ -21,4 +21,15 @@ public class ErrorDetailsTest {
         assertEquals("{\"messageId\":\"drb.general.error\",\"status\":500,\"detail\":\"" +
                 "An unrecoverable error occurred\",\"balance\":23}", serialized);
     }
+
+    @Test
+    public void shouldParseJson() throws Exception {
+        String json = "{\"messageId\":\"drb.general.error\",\"status\":500,\"detail\":\"" +
+                "An unrecoverable error occurred\"}";
+
+        ObjectMapper mapper = new ObjectMapper();
+        ErrorDetails error = mapper.readValue(json, ErrorDetails.class);
+
+        assertEquals("drb.general.error", error.getMessageId());
+    }
 }
