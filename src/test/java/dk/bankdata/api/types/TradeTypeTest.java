@@ -33,14 +33,14 @@ public class TradeTypeTest {
 
         @Test
         public void shouldGetTradeType() {
-            assertEquals(TradeType.IMMEDIATE, TradeType.byNumberCode(1).get());
-            assertEquals(TradeType.MARKET, TradeType.byNumberCode(4).get());
-            assertEquals(TradeType.LIMIT, TradeType.byNumberCode(5).get());
+            assertEquals(TradeType.IMMEDIATE, TradeType.byIntCode(1).get());
+            assertEquals(TradeType.MARKET, TradeType.byIntCode(4).get());
+            assertEquals(TradeType.LIMIT, TradeType.byIntCode(5).get());
         }
 
         @Test
         public void shouldGetEmptyOptional() {
-            assertFalse(TradeType.byNumberCode(9).isPresent());
+            assertFalse(TradeType.byIntCode(9).isPresent());
         }
     }
 }

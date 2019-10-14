@@ -12,11 +12,11 @@ public enum TradeType {
     IMMEDIATE('S', 1), MARKET('M', 4), LIMIT('L', 5)/*, EMISSIONS('E'), INTERNAL('I')*/; 
 
     private char charCode;
-    private int numberCode;
+    private int intCode;
 
-    TradeType(char charCode, int numberCode) {
+    TradeType(char charCode, int intCode) {
         this.charCode = charCode;
-        this.numberCode = numberCode;
+        this.intCode = intCode;
     }
 
     /**
@@ -32,12 +32,12 @@ public enum TradeType {
         
     /**
      * Maps from Host system integer code to TradeType.
-     * @param numberCode Host system integer code.
+     * @param intCode Host system integer code.
      * @return corresponding TradeType or empty Optional if no matching TradeType is found.
      */
-    public static Optional<TradeType> byNumberCode(int numberCode) {
+    public static Optional<TradeType> byIntCode(int intCode) {
         return TradeType.stream()
-            .filter(tradeType -> tradeType.getNumberCode() == numberCode)
+            .filter(tradeType -> tradeType.getIntCode() == intCode)
             .findFirst();
     }
 
@@ -49,7 +49,7 @@ public enum TradeType {
         return this.charCode;
     }
 
-    public int getNumberCode() {
-        return this.numberCode;
+    public int getIntCode() {
+        return this.intCode;
     }
 }
