@@ -38,5 +38,8 @@ bin
 # Vim
 .swp
 
+# VS Code
+.vscode
+
 # Other
 TAGS
