@@ -8,12 +8,14 @@ import javax.validation.constraints.NotNull;
 
 public class ErrorDetails {
     @NotNull(message = "MessageId has to be populated")
-    private final String messageId;
+    private String messageId;
     @NotNull(message = "Status has to be populated")
-    private final Integer status;
+    private Integer status;
     @NotNull(message = "Detail has to be populated")
-    private final String detail;
-    private final Map<String, ?> extension;
+    private String detail;
+    private Map<String, ?> extension;
+
+    private ErrorDetails() {}
 
     protected ErrorDetails(ErrorDetails.Builder<?> builder) {
         this.messageId = builder.messageId;
