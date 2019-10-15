@@ -1,6 +1,7 @@
 package dk.bankdata.api.types;
 
-import java.util.Optional;
+import dk.bankdata.api.exceptions.UnknownTradeTypeException;
+
 import java.util.stream.Stream;
 
 /**
@@ -8,8 +9,8 @@ import java.util.stream.Stream;
  */
 public enum TradeType {
 
-    // Unknown number code for EMISSIONS and INTERNAL
-    IMMEDIATE('S', 1), MARKET('M', 4), LIMIT('L', 5)/*, EMISSIONS('E'), INTERNAL('I')*/; 
+    // Unknown int code for EMISSIONS('E') and INTERNAL('I')
+    IMMEDIATE('S', 1), MARKET('M', 4), LIMIT('L', 5); 
 
     private char charCode;
     private int intCode;
@@ -22,23 +23,27 @@ public enum TradeType {
     /**
      * Maps from Host system character code to TradeType.
      * @param charCode Host system character code.
-     * @return corresponding TradeType or empty Optional if no matching TradeType is found.
+     * @return corresponding TradeType.
+     * @throws UnknownTradeTypeException if no matching TradeType is found.
      */
-    public static Optional<TradeType> byCharCode(char charCode) {
+    public static TradeType byCharCode(char charCode) {
         return TradeType.stream()
             .filter(tradeType -> tradeType.getCharCode() == charCode)
-            .findFirst();
+            .findFirst()
+            .orElseThrow(() -> new UnknownTradeTypeException(charCode));
     }
         
     /**
      * Maps from Host system integer code to TradeType.
      * @param intCode Host system integer code.
-     * @return corresponding TradeType or empty Optional if no matching TradeType is found.
+     * @return corresponding TradeType.
+     * @throws UnknownTradeTypeException if no matching TradeType is found.
      */
-    public static Optional<TradeType> byIntCode(int intCode) {
+    public static TradeType byIntCode(int intCode) {
         return TradeType.stream()
             .filter(tradeType -> tradeType.getIntCode() == intCode)
-            .findFirst();
+            .findFirst()
+            .orElseThrow(() -> new UnknownTradeTypeException(intCode));
     }
 
     public static Stream<TradeType> stream() {
