@@ -1,7 +1,7 @@
 package dk.bankdata.api.types;
 
-import dk.bankdata.api.exceptions.UnknownTradeTypeException;
-
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -11,6 +11,16 @@ public enum TradeType {
 
     // Unknown int code for EMISSIONS('E') and INTERNAL('I')
     IMMEDIATE('S', 1), MARKET('M', 4), LIMIT('L', 5); 
+
+    private static final Map<Integer, TradeType> INT_CODE = new HashMap<>();
+    private static final Map<Character, TradeType> CHAR_CODE = new HashMap<>();
+
+    static {
+        for (TradeType tradeType : values()) {
+            INT_CODE.put(tradeType.intCode, tradeType);
+            CHAR_CODE.put(tradeType.charCode, tradeType);
+        }
+    }
 
     private char charCode;
     private int intCode;
@@ -23,27 +33,19 @@ public enum TradeType {
     /**
      * Maps from Host system character code to TradeType.
      * @param charCode Host system character code.
-     * @return corresponding TradeType.
-     * @throws UnknownTradeTypeException if no matching TradeType is found.
+     * @return corresponding TradeType or null if not exist.
      */
     public static TradeType byCharCode(char charCode) {
-        return TradeType.stream()
-            .filter(tradeType -> tradeType.getCharCode() == charCode)
-            .findFirst()
-            .orElseThrow(() -> new UnknownTradeTypeException(charCode));
+        return CHAR_CODE.get(charCode);
     }
         
     /**
      * Maps from Host system integer code to TradeType.
      * @param intCode Host system integer code.
-     * @return corresponding TradeType.
-     * @throws UnknownTradeTypeException if no matching TradeType is found.
+     * @return corresponding TradeType or null if not exist.
      */
     public static TradeType byIntCode(int intCode) {
-        return TradeType.stream()
-            .filter(tradeType -> tradeType.getIntCode() == intCode)
-            .findFirst()
-            .orElseThrow(() -> new UnknownTradeTypeException(intCode));
+        return INT_CODE.get(intCode);
     }
 
     public static Stream<TradeType> stream() {

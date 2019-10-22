@@ -1,10 +1,6 @@
 package dk.bankdata.api.types;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import dk.bankdata.api.exceptions.UnknownTradeTypeException;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,10 +20,8 @@ public class TradeTypeTest {
         }
 
         @Test
-        public void shouldThrowException() {
-            UnknownTradeTypeException exception = assertThrows(UnknownTradeTypeException.class, () -> TradeType.byCharCode('X'));
-            assertTrue(exception.getMessage().endsWith("'X'"));
-
+        public void shouldReturnNullIfNotExists() {
+            assertEquals(null, TradeType.byCharCode('X'));
         }
     }
 
@@ -43,9 +37,8 @@ public class TradeTypeTest {
         }
 
         @Test
-        public void shouldGetEmptyOptional() {
-            UnknownTradeTypeException exception = assertThrows(UnknownTradeTypeException.class, () -> TradeType.byIntCode(9));
-            assertTrue(exception.getMessage().endsWith("'9'"));
+        public void shouldReturnNullIfNotExists() {
+            assertEquals(null, TradeType.byIntCode('0'));
         }
     }
 }
