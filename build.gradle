@@ -60,6 +60,10 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+tasks.withType(GenerateModuleMetadata) {
+    enabled = false
+}
+
 artifacts {
     archives sourceJar
     archives javadocJar
